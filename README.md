@@ -6,7 +6,7 @@ Excel-Press is a Python implementation of Microsoft Office's proprietary VBA com
 Excel files with an '.xls' file extension (Excel 97-2003) are essentially zip files. There are already tools widely available to unzip and decompress the contents of these VBA macros, however; I was unable to find a Python implementation of Microsoft's VBA compression algorithm.
 
 ## Files ##
-* [excel-press.py](https://github.com/coldfusion39/excel-press/blob/master/decompress.py): Python script to compress or decompress a VBA macro file.
+* [excel-press.py](https://github.com/coldfusion39/excel-press/blob/master/decompress.py): Python script to compress or decompress a VBA macro file
 * [macro_raw](https://github.com/coldfusion39/excel-press/blob/master/examples/macro_raw): VBA macro in compressed format
 * [macro_readable](https://github.com/coldfusion39/excel-press/blob/master/examples/macro_readable): VBA macro after decompression
 * [test.xls](https://github.com/coldfusion39/excel-press/blob/master/examples/Excel/test.xls): Excel document containing VBA macro
