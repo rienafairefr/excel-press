@@ -13,11 +13,6 @@ Excel files with an '.xls' file extension (Excel 97-2003) are essentially zip fi
 * [test](https://github.com/coldfusion39/excel-press/tree/master/examples/Excel/test): Contents of [test.xls](https://github.com/coldfusion39/excel-press/blob/master/examples/Excel/test.xls) after the .xls extension is changed to .zip and unzipped
 * [Module1](https://github.com/coldfusion39/excel-press/blob/master/examples/Excel/Module1): Full VBA macro file after unzipping [test.xls](https://github.com/coldfusion39/excel-press/blob/master/examples/Excel/test.xls)
 
-## Requirements ##
-The [olefile](https://bitbucket.org/decalage/olefileio_pl) Python library is required.
-
-`pip install olefile`
-
 ## Examples ##
 Decompress an already compressed VBA macro file
 
