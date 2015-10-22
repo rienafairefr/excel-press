@@ -18,18 +18,24 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
 import argparse
 import math
 import struct
 import sys
 
-parser = argparse.ArgumentParser(description='Compress or decompress a VBA macro file')
-parser.add_argument('-c', '--compress', help='Compress the specified VBA macro file', required=False)
-parser.add_argument('-d', '--decompress', help='Decompressed the specified VBA macro file', required=False)
-parser.add_argument('--raw', help='Output the VBA data as compressed (HEX)', action='store_true', required=False)
-args = parser.parse_args()
-
 def main():
+	parser = argparse.ArgumentParser(description='Compress or decompress a VBA macro file')
+	parser.add_argument('--raw', help='Output the VBA data as compressed (HEX)', action='store_true', required=False)
+	mode = parser.add_mutually_exclusive_group(required=True)
+	mode.add_argument('-c', '--compress', help='Compress the specified VBA macro file', required=False)
+	mode.add_argument('-d', '--decompress', help='Decompressed the specified VBA macro file', required=False)
+	args = parser.parse_args()
+
+	if args.compress and args.raw:
+		print('Raw output --raw can only be used with the -d decompress function!')
+		return 0
+
 	if args.compress:
 		data = open(args.compress, 'rb').read()
 
@@ -38,18 +44,18 @@ def main():
 		print compressed
 	else:
 		macro_file = open(args.decompress, 'rb').read()
-		print decompress(macro_file)
+		print decompress(macro_file, raw=args.raw)
 
 # Decompression algorithm
-def decompress(data):
+def decompress(data, raw=False):
 	search_string = '\x00Attribut'
 	position = data.find(search_string)
 	if position != -1 and data[position + len(search_string)] == 'e':
-		position = -1    
+		position = -1
 
 	compressed_data = data[position - 3:]
 
-	if args.raw:
+	if raw:
 		return compressed_data
 
 	# Actually decompress the data
@@ -267,7 +273,7 @@ class CompressedVBA(VBAStream):
 		maximum_length = (0xFFFF >> bit_count) + 3
 
 		return length_mask, off_set_mask, bit_count, maximum_length
-		
+
 	def pack_copy_token(self, offset, length):
 		length_mask, off_set_mask, bit_count, maximum_length = self.copy_token_help()
 		temp1 = offset - 1
@@ -283,7 +289,7 @@ class CompressedVBA(VBAStream):
 		pad_count = 4096
 		last_byte = self.decompressed_chunk_start + pad_count
 		if self.decompressed_buffer_end < last_byte:
-		   last_byte =  self.decompressed_buffer_end
+			last_byte =  self.decompressed_buffer_end
 
 		for index in xrange(self.decompressed_chunk_start, last_byte):
 			self.compressed_container[self.compressed_current] = self.data[index]
@@ -296,14 +302,4 @@ class CompressedVBA(VBAStream):
 			self.compressed_current = self.compressed_current + 1
 
 if __name__ == '__main__':
-	if args.compress and args.raw:
-		print "Raw output --raw can only be used with the -d decompress function!"
-		sys.exit()
-	elif args.compress and args.decompress:
-		print "You must supply either '-c' for compress or '-d' for decompress, not both!"
-		sys.exit()
-	elif not args.compress and not args.decompress:
-		print "You must supply either '-c' for compress or '-d' for decompress and a VBA file!"
-		sys.exit()
-	else:
-		main()
+	sys.exit(main())
