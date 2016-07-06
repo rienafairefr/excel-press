@@ -163,7 +163,7 @@ class CompressedVBA(VBAStream):
 				self.compress_token_sequence(compressed_end, decompressed_end)
 
 		if self.decompressed_current < decompressed_end:
-			self.compress_raw_chunk(decompressed_end - 1)
+			self.compress_raw_chunk()
 			compressed_flag = 0
 		else:
 			compressed_flag = 1
